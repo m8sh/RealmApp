@@ -1,0 +1,15 @@
+# Node and Next
+node_modules
+.next
+npm-debug.log*
+pnpm-debug.log*
+yarn-error.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+
+# Env
+.env
+.env.local
