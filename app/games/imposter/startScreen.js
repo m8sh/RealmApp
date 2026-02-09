@@ -12,8 +12,7 @@ const games = [
   },
   {
     id: 'coming-soon',
-    title: 'Mystery Mode',
-    blurb: 'Reserved for your next party game.',
+    title: 'maybe ill add smth else who knows',
     status: 'soon',
   },
 ];
@@ -163,16 +162,14 @@ export default function Page() {
 
   return (
     <div className="page">
+      <div className="orb orb-a" />
+      <div className="orb orb-b" />
+      <div className="orb orb-c" />
       <div className="frame">
-        <header className="hero">
-          <h1>Social Games</h1>
-        </header>
-
         {screen === 'home' && (
-          <section className="panel">
+          <section className="panel panel-home">
             <div className="panel-head center">
-              <div>
-                <p className="label">Pick a game</p>
+              <div className="pick-hero">
                 <h2>Pick a game</h2>
               </div>
             </div>
@@ -184,9 +181,8 @@ export default function Page() {
                   onClick={() => game.status === 'ready' && startSetup(game.id)}
                   type="button"
                 >
-                  <div className="status">{game.status === 'ready' ? 'Ready' : 'Coming soon'}</div>
                   <h3>{game.title}</h3>
-                  <p>{game.blurb}</p>
+                  {game.blurb && <p>{game.blurb}</p>}
                 </button>
               ))}
             </div>
@@ -436,60 +432,95 @@ export default function Page() {
       <style jsx>{`
         :global(body) {
           margin: 0;
-          background: #f8fafc;
+          background: #f5f1ea;
         }
         .page {
           min-height: 100vh;
-          background: radial-gradient(circle at 20% 20%, #f1f5f9, #e2e8f0 40%, #f8fafc 70%);
-          color: #0f172a;
+          background: radial-gradient(circle at 24% 18%, #f1e8dd, #e0d4c7 38%, #f6f1e9 70%);
+          color: #1f2428;
           display: flex;
           justify-content: center;
-          padding: 20px 12px 32px;
+          padding: 12px 12px 28px;
           box-sizing: border-box;
           font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+          position: relative;
+          overflow: hidden;
+        }
+        .orb {
+          position: absolute;
+          border-radius: 999px;
+          filter: blur(60px);
+          opacity: 0.42;
+          z-index: 0;
+        }
+        .orb-a {
+          width: 340px;
+          height: 340px;
+          top: -120px;
+          left: -80px;
+          background: radial-gradient(circle, rgba(216, 193, 170, 0.7), rgba(216, 193, 170, 0.05));
+        }
+        .orb-b {
+          width: 280px;
+          height: 280px;
+          top: 120px;
+          right: -60px;
+          background: radial-gradient(circle, rgba(179, 192, 204, 0.55), rgba(179, 192, 204, 0.08));
+        }
+        .orb-c {
+          width: 260px;
+          height: 260px;
+          bottom: -120px;
+          left: 20%;
+          background: radial-gradient(circle, rgba(210, 206, 196, 0.6), rgba(210, 206, 196, 0.08));
         }
         .frame {
           width: 100%;
           max-width: 960px;
           display: grid;
-          gap: 12px;
+          gap: 10px;
+          position: relative;
+          z-index: 1;
         }
-        .hero {
-          background: #0f172a;
-          color: #f8fafc;
-          padding: 10px 14px;
-          border-radius: 12px;
-          display: flex;
-          align-items: center;
-          justify-content: flex-start;
-          box-shadow: 0 6px 18px rgba(15, 23, 42, 0.15);
-          min-height: 56px;
-        }
-        .hero h1 {
-          margin: 0;
-          font-size: 18px;
-          letter-spacing: 0.02em;
-          font-weight: 700;
+        .panel-home .game-grid {
+          margin-top: 2px;
         }
         .panel {
-          background: #ffffff;
-          border: 1px solid #e2e8f0;
+          background: rgba(255, 255, 253, 0.82);
+          border: 1px solid #d9cfc2;
           border-radius: 12px;
-          padding: 16px;
-          box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
+          padding: 14px;
+          box-shadow: 0 10px 26px rgba(35, 38, 40, 0.08), 0 1px 0 rgba(255, 255, 255, 0.55);
           display: grid;
-          gap: 14px;
+          gap: 12px;
+          backdrop-filter: blur(6px);
+        }
+        .panel-home {
+          padding: 4px 10px 10px;
+          gap: 8px;
         }
         .panel-head {
           display: flex;
           align-items: center;
           justify-content: space-between;
           gap: 8px;
-          padding: 4px 0 6px;
+          padding: 4px 0 4px;
         }
         .panel-head.center {
           justify-content: center;
           text-align: center;
+        }
+        .panel-home .panel-head {
+          padding: 2px 0 2px;
+        }
+        .pick-hero {
+          width: 100%;
+          background: linear-gradient(135deg, #e8dfd4, #d1c4b5);
+          border: 1px solid #c4b6a6;
+          border-radius: 16px;
+          padding: 16px 22px;
+          box-shadow: 0 12px 28px rgba(35, 38, 40, 0.12);
+          margin: 0 0 6px;
         }
         h2 {
           margin: 2px 0;
@@ -514,32 +545,27 @@ export default function Page() {
         .game-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-          gap: 10px;
+          gap: 12px;
+          margin-top: 4px;
         }
         .game-card {
           text-align: left;
           border-radius: 10px;
-          padding: 14px;
-          border: 1px solid #e2e8f0;
-          background: #f8fafc;
+          padding: 12px 12px 14px;
+          border: 1px solid #d5c9ba;
+          background: #f8f4ed;
           cursor: pointer;
           transition: transform 0.1s ease, box-shadow 0.1s ease, border-color 0.1s ease;
         }
         .game-card:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
-          border-color: #cbd5e1;
+          transform: translateY(-3px);
+          box-shadow: 0 14px 30px rgba(32, 35, 38, 0.12);
+          border-color: #c3b6a7;
         }
         .game-card.disabled {
           cursor: not-allowed;
-          opacity: 0.55;
-        }
-        .status {
-          font-size: 12px;
-          color: #0ea5e9;
-          font-weight: 700;
-          text-transform: uppercase;
-          letter-spacing: 0.08em;
+          opacity: 0.6;
+          box-shadow: none;
         }
         h3 {
           margin: 4px 0 6px;
@@ -565,26 +591,26 @@ export default function Page() {
           display: inline-flex;
           align-items: center;
           gap: 6px;
-          background: #e2e8f0;
+          background: #e6ddd3;
           border-radius: 999px;
           padding: 6px 10px;
           font-weight: 600;
-          color: #0f172a;
+          color: #2c3135;
         }
         .chip.mini {
           padding: 4px 8px;
           font-size: 13px;
         }
         .chip.quiet {
-          background: #f1f5f9;
-          color: #475569;
+          background: #f1ebe3;
+          color: #51565c;
         }
         .chip-remove {
           background: none;
           border: none;
           cursor: pointer;
           font-size: 14px;
-          color: #0f172a;
+          color: #2c3135;
         }
         .inline-form {
           display: flex;
@@ -596,8 +622,9 @@ export default function Page() {
           min-width: 200px;
           padding: 10px 12px;
           border-radius: 10px;
-          border: 1px solid #cbd5e1;
+          border: 1px solid #c3b6a7;
           font-size: 15px;
+          background: #fefcf8;
         }
         .pill-row {
           display: flex;
@@ -606,18 +633,18 @@ export default function Page() {
         }
         .pill {
           border-radius: 999px;
-          border: 1px solid #cbd5e1;
-          background: #f8fafc;
+          border: 1px solid #c3b6a7;
+          background: #f4ede3;
           padding: 8px 12px;
           cursor: pointer;
-          color: #0f172a;
+          color: #2c3135;
           font-weight: 600;
         }
         .pill.active {
-          background: #0ea5e9;
-          color: #f8fafc;
-          border-color: #0ea5e9;
-          box-shadow: 0 10px 22px rgba(14, 165, 233, 0.25);
+          background: #7f8e98;
+          color: #f8f7f5;
+          border-color: #7f8e98;
+          box-shadow: 0 10px 22px rgba(79, 94, 105, 0.22);
         }
         .actions {
           display: flex;
@@ -631,18 +658,18 @@ export default function Page() {
           padding: 10px 12px;
           font-weight: 700;
           font-size: 14px;
-          color: #0f172a;
-          background: #e2e8f0;
+          color: #2c3135;
+          background: #e5dcd0;
         }
         button.primary {
-          background: linear-gradient(135deg, #0ea5e9, #22c55e);
-          color: #f8fafc;
-          box-shadow: 0 14px 34px rgba(34, 197, 94, 0.35);
+          background: linear-gradient(135deg, #6f7f8a, #98a3a7);
+          color: #f9f8f6;
+          box-shadow: 0 14px 34px rgba(63, 81, 92, 0.28);
         }
         button.ghost {
           background: transparent;
-          border: 1px solid #cbd5e1;
-          color: #0f172a;
+          border: 1px solid #c3b6a7;
+          color: #2c3135;
         }
         button:disabled {
           opacity: 0.5;
@@ -651,24 +678,24 @@ export default function Page() {
         }
         .error {
           padding: 12px;
-          background: #fef2f2;
-          border: 1px solid #fecdd3;
-          color: #b91c1c;
+          background: #f9e8e4;
+          border: 1px solid #e9c9c0;
+          color: #a34940;
           border-radius: 10px;
         }
         .card {
-          border: 1px solid #e2e8f0;
+          border: 1px solid #d9cfc2;
           border-radius: 10px;
           padding: 12px;
-          background: #f8fafc;
+          background: #fbf7f1;
         }
         .player {
           margin: 2px 0;
           font-size: 22px;
         }
         .reveal-box {
-          background: #0f172a;
-          color: #f8fafc;
+          background: #283037;
+          color: #f7f4ed;
           border-radius: 10px;
           padding: 12px;
           margin-top: 8px;
@@ -687,10 +714,10 @@ export default function Page() {
           gap: 6px;
           padding: 8px 10px;
           border-radius: 10px;
-          border: 1px solid #cbd5e1;
-          background: #f8fafc;
+          border: 1px solid #c3b6a7;
+          background: #f4ede3;
           font-weight: 600;
-          color: #0f172a;
+          color: #2c3135;
         }
         .toggle.column {
           flex-direction: column;
@@ -723,20 +750,16 @@ export default function Page() {
           align-items: start;
         }
         .empty {
-          color: #94a3b8;
+          color: #7a7f85;
           margin: 0;
         }
         .complete {
-          border: 1px dashed #cbd5e1;
+          border: 1px dashed #c3b6a7;
           border-radius: 10px;
           padding: 12px;
-          background: #f1f5f9;
+          background: #f3eee6;
         }
         @media (max-width: 640px) {
-          .hero {
-            flex-direction: column;
-            align-items: flex-start;
-          }
           .panel-head {
             flex-direction: column;
             align-items: flex-start;
