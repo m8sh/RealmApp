@@ -41,7 +41,7 @@ export default function Page() {
   const [players, setPlayers] = useState([]);
   const [nameInput, setNameInput] = useState('');
   const [selectedCategories, setSelectedCategories] = useState([]);
-  const [difficulty, setDifficulty] = useState(difficulties[0]?.id || '');
+  const [selectedDifficulties, setSelectedDifficulties] = useState(difficulties[0] ? [difficulties[0].id] : []);
   const [round, setRound] = useState(null);
   const [error, setError] = useState('');
   const [allowMultipleImposters, setAllowMultipleImposters] = useState(false);
@@ -82,8 +82,12 @@ export default function Page() {
       setError('Select at least one category.');
       return;
     }
+    if (!selectedDifficulties.length) {
+      setError('Select at least one difficulty.');
+      return;
+    }
 
-    const { word, imposterWord, hint } = pickWord(selectedCategories, difficulty);
+    const { word, imposterWord, hint } = pickWord(selectedCategories, selectedDifficulties);
     const hintText = hint || buildHint(word);
     const order = shuffle(cleanedPlayers);
     const maxImposters = Math.max(1, order.length - 1);
@@ -155,10 +159,20 @@ export default function Page() {
     });
   };
 
+  const toggleDifficulty = (difficultyId) => {
+    setSelectedDifficulties((prev) => {
+      if (prev.includes(difficultyId)) {
+        return prev.filter((id) => id !== difficultyId);
+      }
+      return [...prev, difficultyId];
+    });
+  };
+
   const silentImposterDisabled = imposterGetsHint;
   const hintDisabled = hiddenImposterMode;
   const activePlayer = round ? round.order[round.index] : null;
   const isLastPlayer = round ? round.index === round.order.length - 1 : false;
+  const canRevealFinal = isLastPlayer && round?.revealed;
 
   return (
     <div className="page">
@@ -257,9 +271,9 @@ export default function Page() {
                 {difficulties.map((d) => (
                   <button
                     key={d.id}
-                    className={`pill ${difficulty === d.id ? 'active' : ''}`}
+                    className={`pill ${selectedDifficulties.includes(d.id) ? 'active' : ''}`}
                     type="button"
-                    onClick={() => setDifficulty(d.id)}
+                    onClick={() => toggleDifficulty(d.id)}
                   >
                     {d.label}
                   </button>
@@ -337,7 +351,12 @@ export default function Page() {
             {error && <div className="error">{error}</div>}
 
             <div className="actions">
-              <button className="primary" type="button" onClick={startRound} disabled={!selectedCategories.length}>
+              <button
+                className="primary"
+                type="button"
+                onClick={startRound}
+                disabled={!selectedCategories.length || !selectedDifficulties.length}
+              >
                 Start game
               </button>
               <button className="ghost" type="button" onClick={() => setPlayers([])}>
@@ -370,9 +389,9 @@ export default function Page() {
                   <p className="reveal">
                     {round.imposters.includes(activePlayer)
                       ? hiddenImposterMode
-                        ? `Secret word: ${round.fakeWord}`
+                        ? `Your word is "${round.fakeWord}"`
                         : `You are the imposter. ${imposterGetsHint ? round.hint : 'Guess the word.'}`
-                      : `Secret word: ${round.word}`}
+                      : `Your word is "${round.word}"`}
                   </p>
                 )}
                 {round.revealed && round.concealed && <p className="reveal">Hidden. Tap reveal again.</p>}
@@ -392,27 +411,33 @@ export default function Page() {
                         Next player
                       </button>
                     )}
-                    {isLastPlayer && (
-                      <button className="primary" type="button" onClick={revealFinal}>
-                        Reveal imposter{round.imposters.length > 1 ? 's' : ''}
-                      </button>
-                    )}
                   </>
                 )}
               </div>
             </div>
 
+            {canRevealFinal && (
+              <div className="final-action">
+                <button className="imposter-button" type="button" onClick={revealFinal}>
+                  Reveal imposter{round.imposters.length > 1 ? 's' : ''}
+                </button>
+              </div>
+            )}
+
             {round.finalReveal && (
               <div className="complete">
-                <h3>Reveal</h3>
-                <p className="hint">
-                  Word: <strong>{round.word}</strong>
-                </p>
-                <p className="hint">
-                  Imposter{round.imposters.length > 1 ? 's' : ''}:{' '}
-                  <strong>{round.imposters.join(', ')}</strong>
-                </p>
-                <div className="actions">
+                <h3 className="complete-title">Round reveal</h3>
+                <div className="result-card">
+                  <p className="result-label">Word</p>
+                  <p className="result-value">{round.word}</p>
+                </div>
+                <div className="result-card">
+                  <p className="result-label">Imposter{round.imposters.length > 1 ? 's' : ''}</p>
+                  <p className="result-value">
+                    {round.imposters.map((name, idx) => `${name}${idx < round.imposters.length - 1 ? ', ' : ''}`)}
+                  </p>
+                </div>
+                <div className="actions results-actions">
                   <button className="primary" type="button" onClick={reshuffleSameGroup}>
                     New word, same names
                   </button>
@@ -435,7 +460,6 @@ export default function Page() {
           background: #f5f1ea;
         }
         .page {
-          min-height: 100vh;
           background: radial-gradient(circle at 24% 18%, #f1e8dd, #e0d4c7 38%, #f6f1e9 70%);
           color: #1f2428;
           display: flex;
@@ -699,9 +723,27 @@ export default function Page() {
           border-radius: 10px;
           padding: 12px;
           margin-top: 8px;
+          margin-bottom: 12px;
           min-height: 64px;
           display: flex;
           align-items: center;
+        }
+        .imposter-button {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          background: linear-gradient(135deg, #9b694e, #c58b63);
+          color: #fdf8f2;
+          border: none;
+          border-radius: 12px;
+          padding: 15px 18px;
+          font-size: 15px;
+          font-weight: 800;
+          box-shadow: 0 16px 36px rgba(141, 104, 79, 0.28);
+          width: 100%;
+        }
+        .final-action {
+          margin-top: 18px;
         }
         .reveal {
           margin: 0;
@@ -758,6 +800,35 @@ export default function Page() {
           border-radius: 10px;
           padding: 12px;
           background: #f3eee6;
+          display: grid;
+          gap: 10px;
+        }
+        .complete-title {
+          margin: 0;
+          font-size: 18px;
+          letter-spacing: 0.01em;
+        }
+        .result-card {
+          background: #fbf7f1;
+          border: 1px solid #d9cfc2;
+          border-radius: 10px;
+          padding: 12px;
+        }
+        .result-label {
+          margin: 0;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          font-size: 12px;
+          color: #6a625a;
+        }
+        .result-value {
+          margin: 4px 0 0;
+          font-size: 22px;
+          font-weight: 800;
+          color: #2c3135;
+        }
+        .results-actions {
+          margin-top: 16px;
         }
         @media (max-width: 640px) {
           .panel-head {

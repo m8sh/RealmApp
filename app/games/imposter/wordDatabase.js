@@ -516,13 +516,22 @@ export function listDifficulties() {
   return difficulties.map((id) => ({ id, label: id.charAt(0).toUpperCase() + id.slice(1) }));
 }
 
-export function pickWord(categoryIds, difficulty) {
+export function pickWord(categoryIds, difficultyIds) {
+  const allowedDifficulties = Array.isArray(difficultyIds)
+    ? difficultyIds.filter(Boolean)
+    : difficultyIds
+    ? [difficultyIds]
+    : [];
   const allowed = categoryIds?.length
     ? wordDatabase.filter((c) => categoryIds.includes(c.id))
     : wordDatabase;
   const categoryPool = allowed.length ? allowed : wordDatabase;
   const category = randomFrom(categoryPool) || wordDatabase[0];
-  const filtered = category?.entries.filter((entry) => entry.difficulty === difficulty) || [];
+  const filtered =
+    category?.entries.filter((entry) => {
+      if (!allowedDifficulties.length) return false;
+      return allowedDifficulties.includes(entry.difficulty);
+    }) || [];
   const pool = filtered.length ? filtered : category.entries;
   const entry = pool.length ? randomFrom(pool) : { word: 'mystery' };
   const altPool = entry.imposterWords?.length
