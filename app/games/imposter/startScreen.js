@@ -33,6 +33,18 @@ function shuffle(list) {
   return copy;
 }
 
+function pickRandomSubset(list, count) {
+  const pool = [...list];
+  const take = Math.min(count, pool.length);
+  const picked = [];
+  for (let i = 0; i < take; i += 1) {
+    const idx = Math.floor(Math.random() * pool.length);
+    picked.push(pool[idx]);
+    pool.splice(idx, 1);
+  }
+  return picked;
+}
+
 export default function Page() {
   const categories = useMemo(() => listCategories(), []);
   const difficulties = useMemo(() => listDifficulties(), []);
@@ -96,7 +108,7 @@ export default function Page() {
       setError(`Imposters cannot exceed players minus one. Max allowed: ${maxImposters}.`);
       return;
     }
-    const imposterList = order.slice(0, Math.max(1, Math.min(requestedCount, maxImposters)));
+    const imposterList = pickRandomSubset(order, Math.max(1, Math.min(requestedCount, maxImposters)));
 
     setRound({
       word,
