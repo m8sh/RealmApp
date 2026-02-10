@@ -7,12 +7,6 @@ const wordDatabase = [
     entries: [
       {
         difficulty: 'easy',
-        word: 'Apple',
-        hint: 'Fruit',
-        imposterWords: ['cider bottle', 'fruit basket', 'snack cup'],
-      },
-      {
-        difficulty: 'easy',
         word: 'Blanket',
         hint: 'Bedding',
         imposterWords: ['tablecloth', 'poncho', 'picnic mat'],
@@ -191,6 +185,12 @@ const wordDatabase = [
         imposterWords: ['sunscreen', 'hand sanitizer', 'fabric softener'],
       },
       {
+        difficulty: 'easy',
+        word: 'Sunflower',
+        hint: 'Plant',
+        imposterWords: ['daisy', 'marigold', 'black-eyed susan'],
+      },
+      {
         difficulty: 'medium',
         word: 'Hammock',
       },
@@ -243,6 +243,12 @@ const wordDatabase = [
       { difficulty: 'easy', word: 'Salad' },
       { difficulty: 'easy', word: 'Taco', imposterWords: ['burrito'] },
       { difficulty: 'easy', word: 'Cookie' },
+      {
+        difficulty: 'easy',
+        word: 'Apple',
+        hint: 'Fruit',
+        imposterWords: ['cider bottle', 'fruit basket', 'snack cup'],
+      },
       {
         difficulty: 'easy',
         word: 'Trail Mix',
@@ -305,15 +311,54 @@ const wordDatabase = [
     id: 'famousPeople',
     name: 'Famous People',
     entries: [
-      { difficulty: 'easy', word: 'Singer', hint: 'Performer', imposterWords: ['dancer', 'actor', 'presenter'] },
-      { difficulty: 'easy', word: 'Athlete', hint: 'Sports', imposterWords: ['coach', 'referee', 'trainer'] },
-      { difficulty: 'easy', word: 'Teacher', hint: 'School', imposterWords: ['tutor', 'assistant', 'counselor'] },
-      { difficulty: 'medium', word: 'Scientist', hint: 'Discovery', imposterWords: ['researcher', 'professor', 'analyst'] },
-      { difficulty: 'medium', word: 'Inventor', hint: 'Creation', imposterWords: ['entrepreneur', 'designer', 'engineer'] },
-      { difficulty: 'medium', word: 'President', hint: 'Leader', imposterWords: ['senator', 'prime minister', 'governor'] },
-      { difficulty: 'hard', word: 'Philosopher', hint: 'Ideas', imposterWords: ['historian', 'poet', 'theologian'] },
-      { difficulty: 'hard', word: 'Astronaut', hint: 'Space', imposterWords: ['pilot', 'cosmonaut', 'engineer'] },
-      { difficulty: 'hard', word: 'Composer', hint: 'Music', imposterWords: ['conductor', 'producer', 'songwriter'] },
+      {
+        difficulty: 'easy',
+        word: 'Michael Jordan',
+        hint: 'Basketball legend',
+        imposterWords: ['LeBron James', 'Kobe Bryant', "Shaquille O'Neal"],
+      },
+      {
+        difficulty: 'easy',
+        word: 'Oprah Winfrey',
+        hint: 'Talk show icon',
+        imposterWords: ['Ellen DeGeneres', 'Wendy Williams', 'Dr. Phil'],
+      },
+      {
+        difficulty: 'medium',
+        word: 'Albert Einstein',
+        hint: 'Relativity',
+        imposterWords: ['Isaac Newton', 'Stephen Hawking', 'Nikola Tesla'],
+      },
+      {
+        difficulty: 'medium',
+        word: 'Marilyn Monroe',
+        hint: 'Old Hollywood',
+        imposterWords: ['Audrey Hepburn', 'Grace Kelly', 'Elizabeth Taylor'],
+      },
+      {
+        difficulty: 'medium',
+        word: 'Elvis Presley',
+        hint: 'Rock and roll',
+        imposterWords: ['Johnny Cash', 'Frank Sinatra', 'Jerry Lee Lewis'],
+      },
+      {
+        difficulty: 'hard',
+        word: 'Frida Kahlo',
+        hint: 'Mexican artist',
+        imposterWords: ["Georgia O'Keeffe", 'Diego Rivera', 'Salvador Dali'],
+      },
+      {
+        difficulty: 'hard',
+        word: 'Ada Lovelace',
+        hint: 'Computing pioneer',
+        imposterWords: ['Alan Turing', 'Charles Babbage', 'Grace Hopper'],
+      },
+      {
+        difficulty: 'hard',
+        word: 'Nikola Tesla',
+        hint: 'Inventor',
+        imposterWords: ['Thomas Edison', 'Alexander Graham Bell', 'Guglielmo Marconi'],
+      },
     ],
   },
   {
@@ -475,7 +520,6 @@ const wordDatabase = [
       { difficulty: 'easy', word: 'Cat', imposterWords: ['kitten', 'lynx', 'ocelot'] },
       { difficulty: 'easy', word: 'Dog', imposterWords: ['wolf', 'fox', 'coyote'] },
       { difficulty: 'easy', word: 'Rabbit', imposterWords: ['hare', 'ferret', 'guinea pig'] },
-      { difficulty: 'easy', word: 'Sunflower', hint: 'Plant', imposterWords: ['daisy', 'marigold', 'black-eyed susan'] },
       { difficulty: 'medium', word: 'Dolphin', hint: 'Marine', imposterWords: ['porpoise', 'orca', 'shark'] },
       { difficulty: 'medium', word: 'Eagle', hint: 'Bird', imposterWords: ['hawk', 'falcon', 'vulture'] },
       { difficulty: 'medium', word: 'Octopus', hint: 'Tentacles', imposterWords: ['squid', 'cuttlefish', 'jellyfish'] },
