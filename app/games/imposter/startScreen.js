@@ -390,7 +390,9 @@ export default function Page() {
                     {round.imposters.includes(activePlayer)
                       ? hiddenImposterMode
                         ? `Your word is "${round.fakeWord}"`
-                        : `You are the imposter. ${imposterGetsHint ? round.hint : 'Guess the word.'}`
+                        : `You are the imposter. ${
+                            imposterGetsHint ? `Your hint is "${round.hint}".` : 'Guess the word.'
+                          }`
                       : `Your word is "${round.word}"`}
                   </p>
                 )}
@@ -539,12 +541,16 @@ export default function Page() {
         }
         .pick-hero {
           width: 100%;
+          max-width: 100%;
+          box-sizing: border-box;
           background: linear-gradient(135deg, #e8dfd4, #d1c4b5);
           border: 1px solid #c4b6a6;
           border-radius: 16px;
           padding: 16px 22px;
           box-shadow: 0 12px 28px rgba(35, 38, 40, 0.12);
           margin: 0 0 6px;
+          word-break: break-word;
+          overflow: hidden;
         }
         h2 {
           margin: 2px 0;
@@ -834,6 +840,13 @@ export default function Page() {
           .panel-head {
             flex-direction: column;
             align-items: flex-start;
+          }
+          .panel {
+            padding: 12px;
+          }
+          .pick-hero {
+            padding: 12px 14px;
+            border-radius: 14px;
           }
         }
       `}</style>
