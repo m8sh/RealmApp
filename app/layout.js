@@ -1,6 +1,6 @@
 export const metadata = {
-  title: 'Imposter | Realm App',
-  description: 'Pass-and-play word imposter party game.',
+  title: 'Realm App',
+  description: 'Realm GC imposter game.',
 };
 
 export default function RootLayout({ children }) {
