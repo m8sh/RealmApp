@@ -99,8 +99,8 @@ export default function Page() {
       return;
     }
 
-    const { word, imposterWord, hint } = pickWord(selectedCategories, selectedDifficulties);
-    const hintText = hint || buildHint(word);
+    const { word, imposterWord, hint, categoryName } = pickWord(selectedCategories, selectedDifficulties);
+    const imposterHint = categoryName || hint || buildHint(word);
     const order = shuffle(cleanedPlayers);
     const maxImposters = Math.max(1, order.length - 1);
     const requestedCount = allowMultipleImposters ? Math.max(1, imposterCount || 1) : 1;
@@ -119,7 +119,9 @@ export default function Page() {
       revealed: false,
       concealed: false,
       finalReveal: false,
-      hint: hintText,
+      hint: imposterGetsHint ? imposterHint : '',
+      category: categoryName,
+      imposterGetsHint,
     });
     setScreen('round');
     setError('');
@@ -129,11 +131,20 @@ export default function Page() {
     setRound((prev) => (prev ? { ...prev, revealed: true, concealed: false } : prev));
   };
 
+  const previousPlayer = () => {
+    setRound((prev) => {
+      if (!prev) return prev;
+      const prevIndex = Math.max(0, prev.index - 1);
+      if (prevIndex === prev.index) return prev;
+      return { ...prev, index: prevIndex, revealed: true, concealed: true };
+    });
+  };
+
   const nextPlayer = () => {
     setRound((prev) => {
       if (!prev) return prev;
       const nextIndex = Math.min(prev.index + 1, prev.order.length - 1);
-      return { ...prev, index: nextIndex, revealed: false, concealed: false };
+      return { ...prev, index: nextIndex, revealed: true, concealed: true };
     });
   };
 
@@ -185,6 +196,10 @@ export default function Page() {
   const activePlayer = round ? round.order[round.index] : null;
   const isLastPlayer = round ? round.index === round.order.length - 1 : false;
   const canRevealFinal = isLastPlayer && round?.revealed;
+  const isImposter = round ? round.imposters.includes(activePlayer) : false;
+  const showImposterHint = round
+    ? round.imposterGetsHint && Boolean(round.hint) && !hiddenImposterMode && isImposter
+    : false;
 
   return (
     <div className="page">
@@ -399,18 +414,21 @@ export default function Page() {
                 {!round.revealed && <p>Tap reveal to see your role.</p>}
                 {round.revealed && !round.concealed && (
                   <p className="reveal">
-                    {round.imposters.includes(activePlayer)
+                    {isImposter
                       ? hiddenImposterMode
                         ? `Your word is "${round.fakeWord}"`
-                        : `You are the imposter. ${
-                            imposterGetsHint ? `Your hint is "${round.hint}".` : 'Guess the word.'
-                          }`
+                        : `You are the imposter.${showImposterHint && round.hint ? `\nCategory hint: ${round.hint}` : ''}`
                       : `Your word is "${round.word}"`}
                   </p>
                 )}
                 {round.revealed && round.concealed && <p className="reveal">Hidden. Tap reveal again.</p>}
               </div>
               <div className="actions">
+                {round.index > 0 && (
+                  <button className="primary" type="button" onClick={previousPlayer}>
+                    Previous player
+                  </button>
+                )}
                 {!round.revealed ? (
                   <button className="primary" type="button" onClick={revealRole}>
                     Reveal my role

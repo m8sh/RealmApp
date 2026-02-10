@@ -492,6 +492,7 @@ export function pickWord(categoryIds, difficultyIds) {
   return {
     word: entry.word,
     imposterWord,
-    hint: entry.hint || ''
-      };
+    hint: entry.hint || '',
+    categoryName: category.name,
+  };
 }
