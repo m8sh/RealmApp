@@ -1,6 +1,6 @@
 'use client';
 
-const cards = [
+const baseCards = [
   { name: 'Three Musketeers', image: '/assets/clash-royale/cards/3Musk.webp' },
   { name: 'Archer Queen', image: '/assets/clash-royale/cards/ArcherQueen.webp' },
   { name: 'Archers', image: '/assets/clash-royale/cards/Archers.webp' },
@@ -124,11 +124,71 @@ const cards = [
   { name: 'Zappies', image: '/assets/clash-royale/cards/Zappies.webp' },
 ];
 
+const heroCards = [
+  { name: 'Hero - Giant', image: '/assets/clash-royale/cards/HGiant.webp' },
+  { name: 'Hero - Goblins', image: '/assets/clash-royale/cards/HGobs.webp' },
+  { name: 'Hero - Ice Golem', image: '/assets/clash-royale/cards/HIceGolem.webp' },
+  { name: 'Hero - Knight', image: '/assets/clash-royale/cards/HKnight.webp' },
+  { name: 'Hero - Mega Minion', image: '/assets/clash-royale/cards/HMM.webp' },
+  { name: 'Hero - Mini P.E.K.K.A.', image: '/assets/clash-royale/cards/HMP.webp' },
+  { name: 'Hero - Musketeer', image: '/assets/clash-royale/cards/HMusk.webp' },
+  { name: 'Hero - Wizard', image: '/assets/clash-royale/cards/Hwiz.webp' },
+];
+
+const evoCards = [
+  { name: 'Evolution - Archers', image: '/assets/clash-royale/cards/EvoArchers.webp' },
+  { name: 'Evolution - Baby Dragon', image: '/assets/clash-royale/cards/EvoBabyD.webp' },
+  { name: 'Evolution - Barbarians', image: '/assets/clash-royale/cards/EvoBarbs.webp' },
+  { name: 'Evolution - Goblin Barrel', image: '/assets/clash-royale/cards/EvoBarrel.webp' },
+  { name: 'Evolution - Bats', image: '/assets/clash-royale/cards/EvoBats.webp' },
+  { name: 'Evolution - Bomber', image: '/assets/clash-royale/cards/EvoBomber.webp' },
+  { name: 'Evolution - Cannon', image: '/assets/clash-royale/cards/EvoCannon.webp' },
+  { name: 'Evolution - Dart Goblin', image: '/assets/clash-royale/cards/EvoDartGob.webp' },
+  { name: 'Evolution - Electro Dragon', image: '/assets/clash-royale/cards/EvoeDragon.webp' },
+  { name: 'Evolution - Executioner', image: '/assets/clash-royale/cards/EvoExe.webp' },
+  { name: 'Evolution - Firecracker', image: '/assets/clash-royale/cards/EvoFirecracker.webp' },
+  { name: 'Evolution - Furnace', image: '/assets/clash-royale/cards/EvoFurnace.webp' },
+  { name: 'Evolution - Royal Ghost', image: '/assets/clash-royale/cards/EvoGhost.webp' },
+  { name: 'Evolution - Goblin Giant', image: '/assets/clash-royale/cards/EvoGobGiant.webp' },
+  { name: 'Evolution - Goblin Cage', image: '/assets/clash-royale/cards/EvoGoblinCage.webp' },
+  { name: 'Evolution - Goblin Drill', image: '/assets/clash-royale/cards/EvoGoblinDrill.webp' },
+  { name: 'Evolution - Hunter', image: '/assets/clash-royale/cards/EvoHunter.webp' },
+  { name: 'Evolution - Ice Spirit', image: '/assets/clash-royale/cards/EvoIceSpirit.webp' },
+  { name: 'Evolution - Inferno Dragon', image: '/assets/clash-royale/cards/EvoInfernoD.webp' },
+  { name: 'Evolution - Knight', image: '/assets/clash-royale/cards/EvoKnight.webp' },
+  { name: 'Evolution - Lumberjack', image: '/assets/clash-royale/cards/EvoLumber.webp' },
+  { name: 'Evolution - Mega Knight', image: '/assets/clash-royale/cards/EvoMegaKnight.webp' },
+  { name: 'Evolution - Mortar', image: '/assets/clash-royale/cards/EvoMortar.webp' },
+  { name: 'Evolution - Musketeer', image: '/assets/clash-royale/cards/EvoMusk.webp' },
+  { name: 'Evolution - P.E.K.K.A.', image: '/assets/clash-royale/cards/EvoPEKKA.webp' },
+  { name: 'Evolution - Battle Ram', image: '/assets/clash-royale/cards/EvoRam.webp' },
+  { name: 'Evolution - Royal Giant', image: '/assets/clash-royale/cards/EvoRG.webp' },
+  { name: 'Evolution - Royal Hogs', image: '/assets/clash-royale/cards/EvoRoyalHogs.webp' },
+  { name: 'Evolution - Royal Recruits', image: '/assets/clash-royale/cards/EvoRoyalRecruits.webp' },
+  { name: 'Evolution - Skeleton Army', image: '/assets/clash-royale/cards/EvoSkarmy.webp' },
+  { name: 'Evolution - Skeletons', image: '/assets/clash-royale/cards/EvoSkellies.webp' },
+  { name: 'Evolution - Skeleton Barrel', image: '/assets/clash-royale/cards/EvoSkellyBarrel.webp' },
+  { name: 'Evolution - Giant Snowball', image: '/assets/clash-royale/cards/EvoSnowball.webp' },
+  { name: 'Evolution - Tesla', image: '/assets/clash-royale/cards/EvoTesla.webp' },
+  { name: 'Evolution - Valkyrie', image: '/assets/clash-royale/cards/EvoValk.webp' },
+  { name: 'Evolution - Wall Breakers', image: '/assets/clash-royale/cards/EvoWallBreakers.webp' },
+  { name: 'Evolution - Witch', image: '/assets/clash-royale/cards/EvoWitch.webp' },
+  { name: 'Evolution - Wizard', image: '/assets/clash-royale/cards/EvoWiz.webp' },
+  { name: 'Evolution - Zap', image: '/assets/clash-royale/cards/EvoZap.webp' },
+];
+
 function randomFrom(list) {
   if (!list?.length) return null;
   return list[Math.floor(Math.random() * list.length)];
 }
 
-export function pickCard() {
-  return randomFrom(cards);
+export function pickCard(options = {}) {
+  const includeHeroes = Boolean(options.includeHeroes);
+  const includeEvos = Boolean(options.includeEvos);
+  const pool = [
+    ...baseCards,
+    ...(includeHeroes ? heroCards : []),
+    ...(includeEvos ? evoCards : []),
+  ];
+  return randomFrom(pool);
 }

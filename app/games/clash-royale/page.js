@@ -17,6 +17,8 @@ export default function ClashRoyaleGame() {
   const [nameInput, setNameInput] = useState('');
   const [round, setRound] = useState(null);
   const [error, setError] = useState('');
+  const [includeHeroes, setIncludeHeroes] = useState(false);
+  const [includeEvos, setIncludeEvos] = useState(false);
 
   const addPlayer = () => {
     const trimmed = nameInput.trim();
@@ -42,7 +44,7 @@ export default function ClashRoyaleGame() {
       return;
     }
 
-    const card = pickCard();
+    const card = pickCard({ includeHeroes, includeEvos });
     if (!card) {
       setError('No Clash Royale cards are configured yet.');
       return;
@@ -146,6 +148,26 @@ export default function ClashRoyaleGame() {
               </div>
             </div>
 
+            <div className="section">
+              <div className="section-head">
+                <h4>Card Options</h4>
+              </div>
+              <div className="actions">
+                <label className="toggle">
+                  <input
+                    type="checkbox"
+                    checked={includeHeroes}
+                    onChange={(e) => setIncludeHeroes(e.target.checked)}
+                  />
+                  <span>Include Hero Cards</span>
+                </label>
+                <label className="toggle">
+                  <input type="checkbox" checked={includeEvos} onChange={(e) => setIncludeEvos(e.target.checked)} />
+                  <span>Include Evo Cards</span>
+                </label>
+              </div>
+            </div>
+
             {error && <div className="error">{error}</div>}
 
             <div className="actions">
@@ -231,6 +253,7 @@ export default function ClashRoyaleGame() {
                 <div className="result-card">
                   <p className="result-label">Card</p>
                   <p className="result-value">{round.card.name}</p>
+                  <img className="card-image final-card-image" src={round.card.image} alt={round.card.name} />
                 </div>
                 <div className="result-card">
                   <p className="result-label">Imposter</p>
@@ -356,6 +379,21 @@ export default function ClashRoyaleGame() {
           gap: 10px;
           flex-wrap: wrap;
         }
+        .toggle {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 10px;
+          border-radius: 10px;
+          border: 1px solid #c3b6a7;
+          background: #f4ede3;
+          font-weight: 600;
+          color: #2c3135;
+        }
+        .toggle input {
+          width: 16px;
+          height: 16px;
+        }
         button,
         .ghost-link {
           border: none;
@@ -419,6 +457,11 @@ export default function ClashRoyaleGame() {
           border-radius: 8px;
           border: 1px solid rgba(255, 255, 255, 0.35);
           background: rgba(255, 255, 255, 0.08);
+        }
+        .final-card-image {
+          margin-top: 10px;
+          border-color: #d9cfc2;
+          background: #fff;
         }
         .imposter-button {
           width: 100%;
