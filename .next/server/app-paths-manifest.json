@@ -1,3 +1,5 @@
 {
-  "/page": "app/page.js"
+  "/page": "app/page.js",
+  "/games/imposter/page": "app/games/imposter/page.js",
+  "/games/clash-royale/page": "app/games/clash-royale/page.js"
 }

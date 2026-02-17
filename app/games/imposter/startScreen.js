@@ -1,19 +1,22 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { listCategories, listDifficulties, pickWord } from './wordDatabase';
 
 const games = [
   {
     id: 'imposter',
     title: 'Word Imposter',
-    blurb: 'One secret word, one hidden imposter trying to guess it.',
+    blurb: 'A secret word that the imposter or imposters are trying to guess.',
     status: 'ready',
   },
   {
-    id: 'coming-soon',
-    title: 'maybe ill add smth else who knows',
-    status: 'soon',
+    id: 'clash-royale',
+    title: 'Clash Royale Imposter',
+    blurb: 'Same as regular imposter, just with CR cards instead.',
+    status: 'ready',
+    href: '/games/clash-royale',
   },
 ];
 
@@ -46,6 +49,7 @@ function pickRandomSubset(list, count) {
 }
 
 export default function Page() {
+  const router = useRouter();
   const categories = useMemo(() => listCategories(), []);
   const difficulties = useMemo(() => listDifficulties(), []);
   const [screen, setScreen] = useState('home');
@@ -65,6 +69,15 @@ export default function Page() {
     setSelectedGame(gameId);
     setScreen('setup');
     setError('');
+  };
+
+  const openGame = (game) => {
+    if (game.status !== 'ready') return;
+    if (game.href) {
+      router.push(game.href);
+      return;
+    }
+    startSetup(game.id);
   };
 
   const addPlayer = () => {
@@ -211,7 +224,7 @@ export default function Page() {
           <section className="panel panel-home">
             <div className="panel-head center">
               <div className="pick-hero">
-                <h2>Pick a game</h2>
+                <h2>Choose Your Game</h2>
               </div>
             </div>
             <div className="game-grid">
@@ -219,7 +232,7 @@ export default function Page() {
                 <button
                   key={game.id}
                   className={`game-card ${game.status !== 'ready' ? 'disabled' : ''}`}
-                  onClick={() => game.status === 'ready' && startSetup(game.id)}
+                  onClick={() => openGame(game)}
                   type="button"
                 >
                   <h3>{game.title}</h3>
@@ -550,6 +563,10 @@ export default function Page() {
           display: grid;
           gap: 12px;
           backdrop-filter: blur(6px);
+        }
+        .panel,
+        .panel :global(*) {
+          text-align: center;
         }
         .panel-home {
           padding: 4px 10px 10px;
