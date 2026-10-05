@@ -18,6 +18,13 @@ const games = [
     status: 'ready',
     href: '/games/clash-royale',
   },
+  {
+    id: 'paragraph-imposter',
+    title: 'Paragraph Imposter',
+    blurb: 'Write a paragraph, then guess which one was written by AI.',
+    status: 'ready',
+    href: '/games/paragraph-imposter',
+  },
 ];
 
 function buildHint(word) {
